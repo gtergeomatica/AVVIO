@@ -6,6 +6,9 @@
 
 #define MAX_LENGTH   3000
 #define MAX_SNR_L1   9
+#define FNAME_CNF_RTKLIB "./prova5.conf"
+#define FNAME_JSON "./conf_prms.json"
+#define FNAME_CNF_NARV "./narvalo_conf.dat"
 
 /*
  * this function checks whether the i-th token parsed by the parser is equal to one of the strings we need to update in the conf file
@@ -55,9 +58,9 @@ extern int conf_update(int *count, jsmntok_t *token, const char *json_string)   
 	char *str, *par;
 
 	/* load the conf file of rtkrcv   */	
-	f_conf = fopen("./prova5.conf", "r+");
+	f_conf = fopen(FNAME_CNF_RTKLIB, "r+");
 	if (f_conf == NULL)  {
-		printf("Error in opening the file conf");
+		printf("Error in opening the file conf\n");
 		return -1;
 	}
 	
@@ -86,9 +89,9 @@ extern int conf_update(int *count, jsmntok_t *token, const char *json_string)   
 					l++;
 				}
 			}
-			printf("Nuova stringa da inserire nel file conf: %s", str);
+			printf("Nuova stringa da inserire nel file conf: %s\n", str);
 			if(fputs(str, f_conf)==EOF)  {     /* the updated string is put into the conf file, to update it  */
-				printf("Hoops...something went wrong...");
+				printf("Hoops...something went wrong...\n");
 				return -1;
 			}
 		}
@@ -108,9 +111,9 @@ extern int conf_update(int *count, jsmntok_t *token, const char *json_string)   
 				}
 			}
 			*(par+l)= ' ';			
-			printf("Nuova stringa da inserire nel file conf: %s", str);
+			printf("Nuova stringa da inserire nel file conf: %s\n", str);
 			if(fputs(str, f_conf)==EOF)  {    /* the updated string is put into the conf file, to update it  */
-				printf("Hoops...something went wrong...");
+				printf("Hoops...something went wrong...\n");
 				return -1;
 			}
 		}
@@ -139,9 +142,9 @@ extern int conf_update(int *count, jsmntok_t *token, const char *json_string)   
 				t++;   
 			} while (t < MAX_SNR_L1);
 			*(par+(l-1))= ' ';	/*this eliminates the last comma */
-			printf("Nuova stringa da inserire nel file conf: %s", str);
+			printf("Nuova stringa da inserire nel file conf: %s\n", str);
 			if(fputs(str, f_conf)==EOF)  {
-				printf("Hoops...something went wrong...");
+				printf("Hoops...something went wrong...\n");
 				return -1;
 			}
 		}				
@@ -162,9 +165,9 @@ extern int conf_update(int *count, jsmntok_t *token, const char *json_string)   
 				}
 			}
 			*(par+l)= ' ';			
-			printf("Nuova stringa da inserire nel file conf: %s", str);
+			printf("Nuova stringa da inserire nel file conf: %s\n", str);
 			if(fputs(str, f_conf)==EOF)  {
-				printf("Hoops...something went wrong...");
+				printf("Hoops...something went wrong...\n");
 				return -1;
 			}
 		}
@@ -200,22 +203,38 @@ extern int conf_update(int *count, jsmntok_t *token, const char *json_string)   
 	fclose(f_conf); free(str);   
 	return 1;
 }
+/* ----------------------------------------------------------------------------------------
+
+This is the function that realizes the json parsing and the creation of the configuration file for NARVALO. In particular it creates a conf file with the following information
+	- ID of the device
+	- type of the device
+	- IP address of the CC
+	- IP port of the CC
+
+-------------------------------------------------------------------------------------------    */
 
 extern int conf_parse(void ) {
-	FILE *f_json;  /* Pointer to the file where the json string has been downloaded */
-	int i, r, json_length=0;
-	char filename[]= "./conf_prms.json";   /* string of the filename of the json string */
+	FILE *f_json, *f_narv;  /* Pointer to the file where the json string has been downloaded and of the conf file for NARVALO */
+	int i, r, json_length=0, flag=0;
+	/*char filename[]= "./conf_prms.json";*/   /* string of the filename of the json string */
+	/*char filename_narv[]= "./narvalo_conf.dat"; */  /* string of the filename of conf file NARVALO */
 	char *json_string; /* string that stores the json string read from file */		
 	jsmn_parser p;
 	jsmntok_t t[100]; 
 	
 	jsmn_init(&p);
 
-	f_json = fopen(filename,"r");   /* read the json string from file */
+	f_json = fopen(FNAME_JSON,"r");   /* read the json string from file */
 	if (f_json == NULL)  {
-		printf("Error in opening the file json");
+		printf("Error in opening the file json\n");
 		return -1;
 	}
+
+	f_narv=fopen(FNAME_CNF_NARV, "a");  /* create the file with conf info for NARVALO  */
+	if (f_narv == NULL)  {
+		printf("Error in creating the configuration file for NARVALO system\n");
+		return -1;
+	}	
 
 	while(fgetc(f_json) != EOF) { /* computes json string length */ 
 		/* move the file position cursor by one and increment json_length 		
@@ -226,8 +245,10 @@ extern int conf_parse(void ) {
 	/* dynamic allocation of memory for json_string */
 	json_string = (char *) malloc(sizeof(*json_string)*(json_length));
 
-	if (json_string == NULL)
-		printf("Something wrong with dynamic allocation of memory");
+	if (json_string == NULL)   {
+		printf("Something wrong with dynamic allocation of memory\n");
+		return -1;
+	}
 	
 	/* create string with the content of the json string read from file 
 	rewind(f_json);	*/
@@ -258,13 +279,13 @@ extern int conf_parse(void ) {
 	r = jsmn_parse(&p, json_string, (json_length-3), t, sizeof(t)/sizeof(t[0]));   
 	if (r < 0) {
 		printf("Failed to parse JSON: %d\n", r);
-		return 1;
+		return -1;
 	}
 
 	/* Assume the top-level element is an object */
 	if (r < 1 || t[0].type != JSMN_OBJECT) {
 		printf("Object expected\n");
-		return 1;
+		return -1;
 	}
 
 	/* Loop over all keys of the root object */
@@ -284,9 +305,34 @@ extern int conf_parse(void ) {
 			printf("- params: %.*s\n", t[i+1].end-t[i+1].start,
 				json_string + t[i+1].start);
 			i++;
+		} else if (jsoneq(json_string, &t[i], "id") == 0 && !flag) {
+			/* We find where the device's id is and store it in f_narv */
+			printf("- id: %.*s\n", t[i+1].end-t[i+1].start,
+				json_string + t[i+1].start);
+			fprintf(f_narv, "%.*s\n", t[i+1].end-t[i+1].start, json_string + t[i+1].start); 
+			i++;
+			flag=1; 
+		} else if (jsoneq(json_string, &t[i], "idAddress") == 0) {
+			/* We find where the IP address of the CC is and store it in f_narv */
+			printf("- IP Address: %.*s\n", t[i+1].end-t[i+1].start,
+				json_string + t[i+1].start);
+			fprintf(f_narv, "%.*s\n", t[i+1].end-t[i+1].start, json_string + t[i+1].start);
+			i++;
+		} else if (jsoneq(json_string, &t[i], "type") == 0) {
+			/* We find where the device's type is and store it in f_narv */
+			printf("- type: %.*s\n", t[i+1].end-t[i+1].start,
+				json_string + t[i+1].start);
+			fprintf(f_narv, "%.*s\n", t[i+1].end-t[i+1].start, json_string + t[i+1].start);
+			i++;
+		} else if (jsoneq(json_string, &t[i], "ipPort") == 0) {
+			/* We find where the connection port of the CC is and store it in f_narv */
+			printf("- IP Port: %.*s\n", t[i+1].end-t[i+1].start,
+				json_string + t[i+1].start);
+			fprintf(f_narv, "%.*s\n", t[i+1].end-t[i+1].start, json_string + t[i+1].start);
+			i++;
 		} else if (jsoneq(json_string, &t[i], "rows") == 0) {
 			int j;
-			printf("-Rows:\n");
+			printf("- Rows:\n");
 			if (t[i+1].type != JSMN_ARRAY) {
 				continue; /* We expect groups to be an array of strings */
 			}
@@ -296,14 +342,14 @@ extern int conf_parse(void ) {
 			}
 			i += t[i+1].size + 1;
 		} else {
-			printf("Unexpected key: %.*s\n", t[i].end-t[i].start,
+			printf("- Key: %.*s\n", t[i].end-t[i].start,
 				json_string + t[i].start);
 		}
 	}
 
-	if(conf_update(&r, t, json_string) == -1) return EXIT_FAILURE;   /*the function for updating the conf file is called here */
+	if(conf_update(&r, t, json_string) == -1) return -1;   /*the function for updating the conf file is called here */   
 
-	fclose(f_json);	free(json_string);
+	fclose(f_json);	fclose(f_narv); free(json_string);
 	return 1;
 }
 

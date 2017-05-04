@@ -13,7 +13,10 @@ int main() {
 	int status;
 	
 	status = conf_parse();  /* call to configuration SW suite   */
-	return EXIT_SUCCESS;
+	if (status == -1)
+		return EXIT_FAILURE;
+	else 
+		return EXIT_SUCCESS;
 }
 
 
