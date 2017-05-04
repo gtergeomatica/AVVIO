@@ -6,7 +6,7 @@
 
 #define MAX_LENGTH   3000
 #define MAX_SNR_L1   9
-#define FNAME_CNF_RTKLIB "./prova5.conf"
+#define FNAME_CNF_RTKLIB "./narv2.conf"
 #define FNAME_JSON "./conf_prms.json"
 #define FNAME_CNF_NARV "./narvalo_conf.dat"
 
@@ -24,7 +24,7 @@ extern int jsoneq(const char *json, jsmntok_t *tok, const char *s) {
 		return -1;
 	}
 	
-	for(i=0; i<=(tok->end - tok->start); i++)   
+	for(i=0; i< (tok->end - tok->start); i++)   
 		aux[i] = json[tok->start+i];     /* auxiliary string for the token    */
 
 	if (tok->type == JSMN_PRIMITIVE && (strstr(aux, s) != NULL)) {   /* here it is checked if the token is equal to the string s; if yes, free memory and returns to the caller*/
