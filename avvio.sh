@@ -43,13 +43,23 @@ mv ${SRC_PARSE}/$CONF_NAME ${CONF}/$CONF_NAME
 #move tho the right folder and start rtkrcv
 cd ${CONF}
 
-rtkrcv -s -o $CONF/$CONF_NAME 
 
 # execute python scripts for recevin alarms msg from CC
+#echo "messaggi_CC.py PID=" >> $SRC_PARSE/log.txt
+#python $ALL/messaggi_CC.py &
+#echo "allarme_generico.py PID=" > $SRC_PARSE/log.txt
+#python $ALL/allarme_generico.py &
+#echo "invio_IMU.py PID=" > $SRC_PARSE/log.txt
+#python $IMU/Narvalo/invio_IMU_CC.py &
 
-python $ALL/messaggi_CC.py
-python $ALL/allarme_generico.py
-python $IMU/Narvalo/invio_IMU_CC.py
+
+#execute rtkrcv
+#echo "rtkrcv PID=" > $SRC_PARSE/log.txt
+rtkrcv -s -o $CONF/$CONF_NAME
+
+
+
+
 
 #cd ${CONF}
 #cd /etc/init.d

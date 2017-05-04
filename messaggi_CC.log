@@ -1,0 +1,13 @@
+Setup GPIO pins as inputs and outputs
+Socket created
+Socket bind complete
+Socket now listening
+1493897535.88
+2017/05/04|11:32:16.211220
+Connected with 192.168.2.126:53430
+4|0000|1|0|192.168.2.131
+dati0= 4
+0000
+allarme= 0
+accendo il verde
+Se non ci sono allarmi ne' generici ne' da CC spengo il buzzer
