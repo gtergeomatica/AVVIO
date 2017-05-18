@@ -24,3 +24,5 @@ sleep 30
 
 #cd $CONF
 rtkrcv -s -p 23 -m 24 -o $CONF/$CONF_NAME 
+
+echo "FINE SCRIPT AVVIO RTKLIB"
