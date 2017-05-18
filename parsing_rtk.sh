@@ -27,7 +27,7 @@ CONF_NAME=narv2.conf
 #IP_ADDRESS = "104.46.34.74"
 
 #get the Json string from the "concentratore" in the file conf_prms 
-wget --output-document=${SRC_PARSE}/conf_prms.json http://narvalo.dyndns.org/Narvalo/NarvaloWS/api/Narvalo/GetConfApparato/5
+wget --output-document=${SRC_PARSE}/conf_prms.json http://narvalo.dyndns.org/Narvalo/NarvaloWS/api/Narvalo/GetConfApparato/9
 
 #copy the file .conf from the folder of rtkrcv to the folder of the parser 
 cp ${CONF}/$CONF_NAME ${SRC_PARSE}/$CONF_NAME
