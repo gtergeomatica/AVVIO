@@ -1,7 +1,8 @@
 # AVVIO
 Tutte le procedure SW e codice per gestire in avvio le procedure di update del file di configurazione con info dal Concentratore e l'avvio di rtkrcv
 
-#step 0
+#step 0 
+# ! DA FARE OGNI volta che si fa un git pull!
 - modificare l'identificativo che compare nello script parsing_rtk.sh nella riga dove si chiama il webservice del concentratore NARVALO
 
 #step 2
