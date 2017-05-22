@@ -22,4 +22,4 @@ IMU=/home/pi/NARVALO/BERRYIMU
 
 sleep 10
 
-python $ALL/allarme_generico.py
+$ALL/allarme_generico.py

@@ -22,4 +22,4 @@ IMU=/home/pi/NARVALO/BERRYIMU
 
 sleep 10
 
-python $ALL/messaggi_CC.py
+$ALL/messaggi_CC.py
