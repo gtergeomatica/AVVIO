@@ -32,3 +32,8 @@ update-rc.d parsing_rtk.sh defaults
 ln -s /home/pi/NARVALO/AVVIO/allarme_gen.sh ./
 chmod +x allarme_gen.sh 
 update-rc.d allarme_gen.sh defaults
+
+echo "INSTALLAZIONE COMPLETATA! RICORDARSI DI MODIFICARE L'ID DELL'APPARATO NEL FILE parsing_rtk.sh"
+
+
+exit 0
