@@ -1,3 +1,5 @@
+# GTER copyleft
+# Author: Alessandro Fermi
 # Build options for the creation of the static library jsmn for parsing json string
 # and compiling all source files that implement the configuration update process
 #-include config.mk
