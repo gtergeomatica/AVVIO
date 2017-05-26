@@ -1,4 +1,10 @@
+#! /bin/bash
+# Gter copyleft 2017
+# roberto.marzocchi@gter.it
 
+
+make all
+sudo make install
 
 cd /etc/init.d
 

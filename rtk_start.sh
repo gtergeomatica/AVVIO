@@ -20,7 +20,7 @@ ALL=/home/pi/NARVALO/ALLERTA_ALLARME
 IMU=/home/pi/NARVALO/BERRYIMU
 CONF_NAME=narv2.conf
 
-sleep 30
+sleep 20
 
 #cd $CONF
 rtkrcv -s -p 23 -m 24 -o $CONF/$CONF_NAME 

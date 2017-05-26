@@ -20,6 +20,6 @@ ALL=/home/pi/NARVALO/ALLERTA_ALLARME
 IMU=/home/pi/NARVALO/BERRYIMU
 #CONF_NAME=narv2.conf
 
-sleep 10
+sleep 20
 
 $ALL/allarme_generico.py

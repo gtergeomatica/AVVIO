@@ -192,6 +192,35 @@ extern int conf_update(int *count, jsmntok_t *token, const char *json_string)   
 				return -1;
 			}
 		}
+		else if(strstr(str, "outstr2-path") != NULL)   {  /*the structure of this alternative is to update the file .conf with the actual IP address and connection port */
+            par = strrchr(str, '=');
+            l=1;       
+            k = idx_token_conf("idAddress", token, count, json_string);
+            if (k == -1) continue;           
+           
+            printf("Giusto valore: %.*s\n", token[k+1].end-token[k+1].start,
+                json_string + token[k+1].start);
+            for(j=0;j<(token[k+1].end-token[k+1].start);j++)    {
+                if((json_string[token[k+1].start+j] == '\\') || (json_string[token[k+1].start+j] == '\"'))  continue;
+                else {  
+                    *(par+l) = json_string[token[k+1].start+j];
+                    l++;
+                }
+            }
+            *(par+l)=':'; l++;
+            for(j=0;j<(token[k+3].end-token[k+3].start);j++)    {
+                if((json_string[token[k+3].start+j] == '\\') || (json_string[token[k+3].start+j] == '\"'))  continue;
+                else {  
+                    *(par+l) = json_string[token[k+3].start+j];
+                    l++;
+                }
+            }
+            printf("Nuova stringa da inserire nel file conf: %s", str);
+            if(fputs(str, f_conf)==EOF)  {
+                printf("Hoops...something went wrong...");
+                return -1;
+            }
+        }
 		else   {   /*this erases all not needed in each string text and move the file pointer to the end of the current string */
 		 	for (f = 0; f<(f_pos_end -f_pos_start); f++)   
 				*(str+f) = ' ';
@@ -230,7 +259,7 @@ extern int conf_parse(void ) {
 		return -1;
 	}
 
-	f_narv=fopen(FNAME_CNF_NARV, "a");  /* create the file with conf info for NARVALO  */
+	f_narv=fopen(FNAME_CNF_NARV, "w");  /* create the file with conf info for NARVALO  */
 	if (f_narv == NULL)  {
 		printf("Error in creating the configuration file for NARVALO system\n");
 		return -1;
