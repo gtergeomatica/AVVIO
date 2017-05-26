@@ -1,3 +1,5 @@
+/* GTER copyleft */
+/* Author: Alessandro Fermi */
 /**  This is the file managing the SW modules responsible of the comunication between the server "Concentratore" and the devices for what concerns the exchange of the configuration parameters and the exchange of diagnostics parameters. 
 
 **/
